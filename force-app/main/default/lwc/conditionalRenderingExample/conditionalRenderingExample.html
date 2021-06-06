@@ -8,4 +8,16 @@
         </template>
     </lightning-card>
 
+    <lightning-card title="Iterating Over Cities">
+        <template for:each={cityList} for:item="city">
+            <p key={city}>{city}</p>
+        </template>
+    </lightning-card>
+
+    <lightning-card title="Example Iteration with Iterator">
+        <template iterator:it={cityList}>
+            <p key={it.value}>{it.value}</p>
+        </template>
+    </lightning-card>
+
 </template>

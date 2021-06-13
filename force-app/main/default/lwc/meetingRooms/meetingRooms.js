@@ -1,6 +1,6 @@
 import { LightningElement, track } from 'lwc';
 
-export default class MeetingRoom extends LightningElement {
+export default class MeetingRooms extends LightningElement {
 
     @track selectedMeetingRoom
 

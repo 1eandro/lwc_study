@@ -6,7 +6,7 @@ export default class MeetingRoom extends LightningElement {
     @api showRoomInfo = false;
 
     tileClickHandler() {
-        const tileClick = new CustomEvent('tileclick', { detail: this.meetingRoomInfo })
+        const tileClick = new CustomEvent('tileclick', { detail: this.meetingRoomInfo, bubbles: true })
         this.dispatchEvent(tileClick)
     }
 

@@ -6,9 +6,12 @@
                 fields={fieldsArray} onsuccess={handleSuccess}>
             </lightning-record-form>
             <!-- 
-            mode="readonly" -> For only vieweing the record. Cannot make form editable
-            mode="view"     -> For viewing the reocrd, but can make the form editable
-            mode="edit"     -> For editing the record. Clicking on save button will switch the form in view mode
+                mode="readonly" -> For only vieweing the record. Cannot make form editable
+                mode="view"     -> For viewing the reocrd, but can make the form editable
+                mode="edit"     -> For editing the record. Clicking on save button will switch the form in view mode
+            -->
+            <!-- 
+                with layout-type="Full" you retrieve all the fields from the Page Layout, saving you to specified field by field in the .js 
             -->
         </div>
     </lightning-card>

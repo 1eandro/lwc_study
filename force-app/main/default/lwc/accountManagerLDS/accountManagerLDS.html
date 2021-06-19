@@ -10,7 +10,11 @@
                 </lightning-card>
             </lightning-layout-item>
             <lightning-layout-item size="6" padding="around-small">
-
+                <lightning-card title="View Account Record">
+                    <p><lightning-formatted-text value={retrievedAccountName}></lightning-formatted-text></p>
+                    <p><lightning-formatted-phone value={retrievedAccountPhone}></lightning-formatted-phone></p>
+                    <p><lightning-formatted-url value={retrievedAccountWebsite}></lightning-formatted-url></p>
+                </lightning-card>
             </lightning-layout-item>
         </lightning-layout>
     </lightning-card>

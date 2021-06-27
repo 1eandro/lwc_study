@@ -9,7 +9,7 @@ export default class CarSearchForm extends NavigationMixin(LightningElement) {
   @wire(getCarTypes)
   wiredCarTypes({ data, error }) {
     if (data) {
-      this.carTypes = [{ values: "", label: "All Types" }];
+      this.carTypes = [{ value: "", label: "All Types" }];
       data.forEach((element) => {
         const carType = {};
         carType.value = element.Id;

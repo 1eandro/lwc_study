@@ -5,6 +5,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 export default class CarSearchResult extends LightningElement {
   @api carTypeId;
   @track cars;
+  @track selectedCarId;
 
   @wire(getCars, { carTypeId: "$carTypeId" })
   wiredCars({ data, error }) {
@@ -22,6 +23,11 @@ export default class CarSearchResult extends LightningElement {
       variant: variant
     });
     this.dispatchEvent(evt);
+  }
+
+  carSelectHandler(event) {
+    const carId = event.detail;
+    this.selectedCarId = carId;
   }
 
   get carsFound() {

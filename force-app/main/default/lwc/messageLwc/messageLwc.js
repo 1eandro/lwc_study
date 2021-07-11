@@ -1,8 +1,6 @@
-import { LightningElement, track, wire } from 'lwc';
-import messageDemo from '@salesforce/messageChannel/messageDemo__c';
-import { MessageContext, publish } from 'lightning/messageService';
-
-
+import { LightningElement, track, wire } from "lwc";
+import messageDemo from "@salesforce/messageChannel/messageDemo__c";
+import { MessageContext, publish, subscribe, unsubscribe, APPLICATION_SCOPE } from "lightning/messageService";
 
 export default class MessageLwc extends LightningElement {
 
@@ -10,23 +8,46 @@ export default class MessageLwc extends LightningElement {
 
     @wire(MessageContext) msgContext
 
+    subscription = null
+    connectedCallback() {
+        if (!this.subscription) {
+            this.subscription = subscribe(this.msgContext, messageDemo, (msg) => {
+                this.messageHandler(msg)
+            }, { scope: APPLICATION_SCOPE })
+        }
+    }
+
+    disconnectedCallback() {
+        unsubscribe(this.subscription)
+        this.subscription = null
+    }
+
     sendHandler() {
-        const inputElement = this.template.querySelector('lightning-input')
+        const inputElement = this.template.querySelector("lightning-input")
         if (inputElement) {
             const msg = inputElement.value
             this.messages.push({
                 id: this.messages.length,
                 value: msg,
-                from: 'LWC'
+                from: "LWC"
             })
             // publish message
             const messagePayload = {
-                message: msg
+                message: msg,
+                from: "LWC"
             }
-
             publish(this.msgContext, messageDemo, messagePayload)
+            inputElement.value = ""
+        }
+    }
 
-            inputElement.value = ''
+    messageHandler(messagePayload) {
+        if (messagePayload && messagePayload.from !== "LWC") {
+            this.messages.push({
+                id: this.messages.length,
+                value: messagePayload.message,
+                from: messagePayload.from
+            })
         }
     }
 

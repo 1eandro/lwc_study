@@ -25,7 +25,7 @@ export default class VaccineSlotFinder extends LightningElement {
 
         //build columns/date
         const columns = new Map()
-        columns.set("centerName", { label: "Center Name", fieldName: "centerName", type: "text" })
+        columns.set("centerName", { label: "Center Name", fieldName: "centerName", type: "text", wrapText: true })
 
         //build rows/centers
         const data = new Map()
@@ -39,10 +39,24 @@ export default class VaccineSlotFinder extends LightningElement {
                 const { date, available_capacity, min_age_limit } = session
 
                 // add date as column in data map
-                columns.set(date, { label: date, fieldName: date, type: "text" })
+                columns.set(date, {
+                    label: date,
+                    fieldName: date,
+                    type: "text",
+                    wrapText: true,
+                    cellAttributes: {
+                        class: {
+                            fieldName: "className"
+                        }
+                    }
+                })
 
                 // add column value for the row
-                data.get(center.center_id)[date] = `Available Capacity: ${available_capacity}; Min Age: ${min_age_limit}`
+                data.get(center.center_id)[date] = `Available Capacity: ${available_capacity}
+                Min Age: ${min_age_limit}`
+
+                data.get(center.center_id).className = available_capacity > 0 ? "slds-text-color_success" : "slds-text-color_error"
+
 
             }
 

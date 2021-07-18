@@ -2,23 +2,23 @@ import { LightningElement, track } from 'lwc';
 
 export default class VaccineSlotFinder extends LightningElement {
 
-
     data = []
     columns = []
 
-    connectedCallback() {
-        //const endpoint = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pinCode}&date=${formattedDate}`
-        this.fetchVaccineSlots()
+    pincodeChangeHandler(e) {
+        const pinCode = e.target.value
+        const isEnterKey = e.keyCode === 13
+        const formattedDate = this.template.querySelector('.dateInput').value.split("-").reverse().join("-")
+        if (isEnterKey && pinCode.length === 6) {
+            const endpoint = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pinCode}&date=${formattedDate}`
+            this.fetchVaccineSlots(endpoint)
+        }
     }
 
-    async fetchVaccineSlots() {
-        let pinCode = 302004
-        let formattedDate = "17-07-2021"
-        const vaccineSlotRes = await fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pinCode}&date=${formattedDate}`)
-
+    async fetchVaccineSlots(endpoint) {
+        const vaccineSlotRes = await fetch(endpoint)
         const slotsData = await vaccineSlotRes.json()
         this.buildColumnsAndRows(slotsData.centers)
-
     }
 
     buildColumnsAndRows(payload) {
@@ -30,9 +30,7 @@ export default class VaccineSlotFinder extends LightningElement {
         //build rows/centers
         const data = new Map()
         for (const center of payload) {
-
             data.set(center.center_id, { centerName: center.name })
-
             for (const session of center.sessions) {
 
                 // destructuring syntax
@@ -54,25 +52,15 @@ export default class VaccineSlotFinder extends LightningElement {
                 // add column value for the row
                 data.get(center.center_id)[date] = `Available Capacity: ${available_capacity}
                 Min Age: ${min_age_limit}`
-
                 data.get(center.center_id).className = available_capacity > 0 ? "slds-text-color_success" : "slds-text-color_error"
-
-
             }
-
         }
-
         this.data = Array.from(data.values())
-        // console.log('data values: ' + JSON.stringify(this.data, null, 2))
         this.columns = Array.from(columns.values())
-        // console.log('columns values: ' + JSON.stringify(this.columns, null, 2))
-
     }
 
     get hasData() {
         return this.data.length > 0
     }
-
-
 
 }

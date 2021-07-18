@@ -18,14 +18,40 @@ export default class VaccineSlotFinder extends LightningElement {
         let formattedDate = "17-07-2021"
         const vaccineSlotRes = await fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pinCode}&date=${formattedDate}`)
 
+
+
         const slotsData = await vaccineSlotRes.json()
         console.log("ticaracatica")
-        console.log(slotsData)
+        this.buildColumnsAndRows(slotsData.centers)
 
     }
 
     get hideMessage() {
         return false
+    }
+
+
+    buildColumnsAndRows(data) {
+        //build columns/dadte
+        const dates = new Map()
+        dates.set("name", { label: "Center Name", fieldName: "name", type: "text" })
+
+        //build rows/centers
+        const centers = new Map()
+        for (const center of data) {
+            centers.set(center.center_id, { name: center.name })
+            for (const session of center.sessions) {
+                // destructuring syntax
+                const { date, available_capacity, min_age_limit } = session
+
+                // add date as column in dates map
+                dates.set(date, { label: "Center Name", fieldName: "name", type: "text" })
+            }
+        }
+
+        console.log('dates', dates)
+        console.log('centers', centers)
+
     }
 
 }
